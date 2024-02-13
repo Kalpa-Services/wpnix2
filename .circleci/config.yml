@@ -10,7 +10,7 @@ jobs:
       - run: chmod +x wpnix
       - run: mkdir build
       - run: |
-          VERSION_NUMBER=$(awk -F. '{print $1"."$2"."$3+1}')
+          VERSION_NUMBER=$(echo "1.0.0 + 0.0.1" | bc)
           mkdir -p build/wpnix_${VERSION_NUMBER}/DEBIAN
           echo "Package: wpnix" > build/wpnix_${VERSION_NUMBER}/DEBIAN/control
           echo "Version: ${VERSION_NUMBER}" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
