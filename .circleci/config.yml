@@ -1,10 +1,25 @@
 version: 2.1
-dependencies:
-  pre:
-    - gem install package_cloud
 
-deployment:
-  production:
-    branch: master
-    commands:
-      - package_cloud push carlHandy/wpnix/os/version /path/to/pkg.ext
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.21
+    steps:
+      - checkout
+      - run: echo 'export VERSION=$(git describe --tags --always --dirty="-dev")' >> $BASH_ENV
+      - run: source $BASH_ENV
+      - run: GOOS=linux GOARCH=amd64 go build -o wpnix main.go  
+      - run: chmod +x wpnix
+      - run: mkdir build
+      - run: fpm -s dir -t deb -n wpnix -v $VERSION --prefix=/usr/local/bin ./wpnix=./wpnix
+      - run: gem install package_cloud
+      - run: package_cloud push carlHandy/wpnix/os/version ./build/wpnix_${VERSION}_amd64.deb
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: main
