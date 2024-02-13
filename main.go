@@ -117,7 +117,7 @@ func createNginxConfig(domain string) {
 
 	file, err := os.Create(filepath.Join(nginxAvailable, domain))
 	if err != nil {
-		fmt.Println("Error creating Nginx config file:", err)
+		fmt.Println("\x1b[31mError creating Nginx config file:", err, "\x1b[0m")
 		return
 	}
 	defer file.Close()
