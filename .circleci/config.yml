@@ -13,7 +13,8 @@ jobs:
           VERSION=$(git describe --tags --always)
           mkdir -p build/wpnix/DEBIAN
           echo "Package: wpnix" > build/wpnix/DEBIAN/control
-          echo "Version: $VERSION" >> build/wpnix/DEBIAN/control
+          VERSION_NUMBER=$(echo $VERSION | awk -F. '{print $1"."$2"."$3+1}')
+          echo "Version: $VERSION_NUMBER" >> build/wpnix/DEBIAN/control
           echo "Section: web" >> build/wpnix/DEBIAN/control
           echo "Priority: optional" >> build/wpnix/DEBIAN/control
           echo "Architecture: amd64" >> build/wpnix/DEBIAN/control
