@@ -179,6 +179,18 @@ func configureLetsEncryptSSL(domain string) {
 	exec.Command("certbot", "--nginx", "-d", domain, "-d", "www."+domain).Run()
 }
 
+// Function to finalize setup and restart Nginx
+func finalizeSetupAndRestartNginx(domain string) {
+	// Set permissions and create symlink
+	webPath := filepath.Join(webDir, domain)
+	exec.Command("chown", "-R", webUser, webPath).Run()
+	exec.Command("chmod", "-R", "775", webPath).Run()
+	exec.Command("ln", "-s", filepath.Join(nginxAvailable, domain), filepath.Join(nginxEnabled, domain)).Run()
+
+	// Restart Nginx to apply changes
+	exec.Command("systemctl", "restart", "nginx").Run()
+}
+
 // Main function
 func main() {
 	var (
@@ -218,4 +230,5 @@ func main() {
 	installWordPress(domain, dbUser, dbPass, dbName, dbHost)
 	checkAndInstallCertbot()
 	configureLetsEncryptSSL(domain)
+	finalizeSetupAndRestartNginx(domain)
 }
