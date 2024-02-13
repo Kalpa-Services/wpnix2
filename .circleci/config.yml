@@ -12,7 +12,7 @@ jobs:
       - run: |
           VERSION=$(git describe --tags --always)
           mkdir -p build/wpnix_${VERSION}/DEBIAN
-          echo "Package: wpnix" > build/wpnix/DEBIAN/control
+          echo "Package: wpnix" > build/wpnix_${VERSION}/DEBIAN/control
           VERSION_NUMBER=$(echo $VERSION | awk -F. '{print $1"."$2"."$3+1}')
           echo "Version: $VERSION_NUMBER" >> build/wpnix_${VERSION}/DEBIAN/control
           echo "Section: web" >> build/wpnix_${VERSION}/DEBIAN/control
