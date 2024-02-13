@@ -10,11 +10,10 @@ jobs:
       - run: chmod +x wpnix
       - run: mkdir build
       - run: |
-          VERSION=$(git describe --tags --always)
-          VERSION_NUMBER=$(echo $VERSION | awk -F. '{print $1"."$2"."$3+1}')
+          VERSION_NUMBER=$(awk -F. '{print $1"."$2"."$3+1}')
           mkdir -p build/wpnix_${VERSION_NUMBER}/DEBIAN
           echo "Package: wpnix" > build/wpnix_${VERSION_NUMBER}/DEBIAN/control
-          echo "Version: ${VERSION_NUMBER%.*}.`echo $VERSION_NUMBER | awk -F. '{print $3+1}'`" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
+          echo "Version: ${VERSION_NUMBER}>> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
           echo "Section: web" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
           echo "Priority: optional" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
           echo "Architecture: amd64" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
@@ -26,8 +25,7 @@ jobs:
           dpkg-deb --build build/wpnix_${VERSION_NUMBER}
       - run: apt-get update && apt-get install -y ruby-full && gem install package_cloud
       - run: |
-          VERSION=$(git describe --tags --always)
-          VERSION_NUMBER=$(echo $VERSION | awk -F. '{print $1"."$2"."$3+1}')
+          VERSION_NUMBER=$(awk -F. '{print $1"."$2"."$3+1}')
           package_cloud push carlHandy/wpnix/any/any build/wpnix_${VERSION_NUMBER}.deb
 
 workflows:
