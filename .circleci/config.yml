@@ -11,7 +11,7 @@ jobs:
       - run: GOOS=linux GOARCH=amd64 go build -o wpnix main.go  
       - run: chmod +x wpnix
       - run: mkdir build
-      - run: mkdir wpnix-${VERSION} && cp wpnix wpnix-${VERSION}/usr/local/bin/wpnix && dpkg-deb --build wpnix-${VERSION}
+      - run: mkdir -p wpnix-${VERSION}/usr/local/bin && cp wpnix wpnix-${VERSION}/usr/local/bin/wpnix && dpkg-deb --build wpnix-${VERSION}
       - run: gem install package_cloud
       - run: package_cloud push carlHandy/wpnix/os/version ./build/wpnix_${VERSION}_amd64.deb
 
