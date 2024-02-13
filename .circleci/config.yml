@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.21
+      - image: golang:1.21
     steps:
       - checkout
       - run: echo 'export VERSION=$(git describe --tags --always --dirty="-dev")' >> $BASH_ENV
