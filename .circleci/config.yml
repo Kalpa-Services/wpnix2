@@ -10,9 +10,10 @@ jobs:
       - run: chmod +x wpnix
       - run: mkdir build
       - run: |
+          VERSION=$(git describe --tags --always)
           mkdir -p build/wpnix/DEBIAN
           echo "Package: wpnix" > build/wpnix/DEBIAN/control
-          echo "Version: 1.0.0" >> build/wpnix/DEBIAN/control
+          echo "Version: $VERSION" >> build/wpnix/DEBIAN/control
           echo "Section: web" >> build/wpnix/DEBIAN/control
           echo "Priority: optional" >> build/wpnix/DEBIAN/control
           echo "Architecture: amd64" >> build/wpnix/DEBIAN/control
@@ -23,7 +24,9 @@ jobs:
           cp wpnix build/wpnix/usr/local/bin/wpnix
           dpkg-deb --build build/wpnix
       - run: apt-get update && apt-get install -y ruby-full && gem install package_cloud
-      - run: package_cloud push carlHandy/wpnix/any/any build/wpnix.deb
+      - run: |
+          VERSION=$(git describe --tags --always)
+          package_cloud push carlHandy/wpnix/any/any build/wpnix_${VERSION}.deb
 
 workflows:
   version: 2
