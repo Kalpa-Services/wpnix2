@@ -176,7 +176,12 @@ func checkAndInstallCertbot() {
 // Function to configure Let's Encrypt SSL for the domain
 func configureLetsEncryptSSL(domain string) {
 	fmt.Println("Configuring Let's Encrypt SSL for", domain, "...")
-	exec.Command("certbot", "--nginx", "-d", domain, "-d", "www."+domain).Run()
+	cmd := exec.Command("certbot", "--nginx", "-d", domain, "-d", "www."+domain)
+	if err := cmd.Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "\x1b[31mError configuring Let's Encrypt SSL for "+domain+":", err, "\x1b[0m")
+	} else {
+		fmt.Println("\x1b[32mSuccessfully configured Let's Encrypt SSL for", domain, "\x1b[0m")
+	}
 }
 
 // Function to finalize setup and restart Nginx
