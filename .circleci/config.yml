@@ -25,7 +25,7 @@ jobs:
           dpkg-deb --build build/wpnix_${VERSION_NUMBER}
       - run: apt-get update && apt-get install -y ruby-full && gem install package_cloud
       - run: |
-          VERSION_NUMBER=$(awk -F. '{print $1"."$2"."$3+1}')
+          VERSION_NUMBER=$(awk 'BEGIN {print 1.0 + 0.01}')
           package_cloud push carlHandy/wpnix/any/any build/wpnix_${VERSION_NUMBER}.deb
 
 workflows:
