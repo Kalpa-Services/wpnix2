@@ -25,7 +25,7 @@ jobs:
           cp wpnix wpnix-${VERSION}/usr/local/bin/wpnix
           dpkg-deb --build wpnix-${VERSION}
       - run: apt-get update && apt-get install -y ruby-full && gem install package_cloud
-      - run: package_cloud push carlHandy/wpnix/ubuntu/$(lsb_release -sc) ./build/wpnix_${VERSION}_amd64.deb
+      - run: package_cloud push carlHandy/wpnix/any/any ./build/wpnix_${VERSION}_amd64.deb
 
 workflows:
   version: 2
