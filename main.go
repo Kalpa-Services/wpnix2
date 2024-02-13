@@ -70,10 +70,18 @@ func checkAndInstallPHP() {
 // Function to create nginx config
 func createNginxConfig(domain string) {
 	config := fmt.Sprintf(`server {
+    listen 80;
+    listen [::]:80;
     server_tokens off;
     server_name %s www.%s;
     root %s/%s/wordpress;
     index index.php;
+
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "no-referrer-when-downgrade" always;
+    add_header Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'" always;
 
     location = /favicon.ico {
         log_not_found off;
@@ -91,14 +99,19 @@ func createNginxConfig(domain string) {
     }
 
     location ~ \.php$ {
-        include fastcgi.conf;
+        include snippets/fastcgi-php.conf;
         fastcgi_intercept_errors on;
         fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
     }
 
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
-        expires max;
-        log_not_found off;
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|otf)$ {
+        expires 365d;
+        access_log off;
+        add_header Cache-Control "public";
+    }
+
+    location ~ /\.ht {
+        deny all;
     }
 }`, domain, domain, webDir, domain)
 
