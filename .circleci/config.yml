@@ -14,7 +14,7 @@ jobs:
           mkdir -p build/wpnix_${VERSION}/DEBIAN
           echo "Package: wpnix" > build/wpnix_${VERSION}/DEBIAN/control
           VERSION_NUMBER=$(echo $VERSION | awk -F. '{print $1"."$2"."$3+1}')
-          echo "Version: $VERSION_NUMBER" >> build/wpnix_${VERSION}/DEBIAN/control
+          echo "Version: ${VERSION_NUMBER//[^0-9.]/}" >> build/wpnix_${VERSION}/DEBIAN/control
           echo "Section: web" >> build/wpnix_${VERSION}/DEBIAN/control
           echo "Priority: optional" >> build/wpnix_${VERSION}/DEBIAN/control
           echo "Architecture: amd64" >> build/wpnix_${VERSION}/DEBIAN/control
