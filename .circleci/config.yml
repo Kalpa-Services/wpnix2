@@ -13,7 +13,7 @@ jobs:
           VERSION_NUMBER=$(awk -F. '{print $1"."$2"."$3+1}')
           mkdir -p build/wpnix_${VERSION_NUMBER}/DEBIAN
           echo "Package: wpnix" > build/wpnix_${VERSION_NUMBER}/DEBIAN/control
-          echo "Version: ${VERSION_NUMBER}>> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
+          echo "Version: ${VERSION_NUMBER}" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
           echo "Section: web" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
           echo "Priority: optional" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
           echo "Architecture: amd64" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
@@ -35,4 +35,4 @@ workflows:
       - build:
           filters:
             branches:
-              only: main
+              only: test-ci
