@@ -6,24 +6,22 @@ jobs:
       - image: golang:1.21
     steps:
       - checkout
-      - run: echo 'export VERSION=$(git describe --tags --always --dirty="-dev")' >> $BASH_ENV
-      - run: source $BASH_ENV
       - run: GOOS=linux GOARCH=amd64 go build -o wpnix main.go  
       - run: chmod +x wpnix
       - run: mkdir build
       - run: |
-          mkdir -p wpnix-${VERSION}/DEBIAN
-          echo "Package: wpnix" > wpnix-${VERSION}/DEBIAN/control
-          echo "Version: 1.0.0" >> wpnix-${VERSION}/DEBIAN/control
-          echo "Section: web" >> wpnix-${VERSION}/DEBIAN/control
-          echo "Priority: optional" >> wpnix-${VERSION}/DEBIAN/control
-          echo "Architecture: amd64" >> wpnix-${VERSION}/DEBIAN/control
-          echo "Depends: nginx, php8.2, php8.2-fpm, php8.2-mysql, php8.2-xml, php8.2-mbstring, php8.2-curl, php8.2-zip, perl, certbot" >> wpnix-${VERSION}/DEBIAN/control
-          echo "Maintainer: Your Name <youremail@example.com>" >> wpnix-${VERSION}/DEBIAN/control
-          echo "Description: Installs WordPress and sets up an Nginx server block." >> wpnix-${VERSION}/DEBIAN/control
-          mkdir -p wpnix-${VERSION}/usr/local/bin
-          cp wpnix wpnix-${VERSION}/usr/local/bin/wpnix
-          dpkg-deb --build wpnix-${VERSION}
+          mkdir -p wpnix/DEBIAN
+          echo "Package: wpnix" > wpnix/DEBIAN/control
+          echo "Version: 1.0.0" >> wpnix/DEBIAN/control
+          echo "Section: web" >> wpnix/DEBIAN/control
+          echo "Priority: optional" >> wpnix/DEBIAN/control
+          echo "Architecture: amd64" >> wpnix/DEBIAN/control
+          echo "Depends: nginx, php8.2, php8.2-fpm, php8.2-mysql, php8.2-xml, php8.2-mbstring, php8.2-curl, php8.2-zip, perl, certbot" >> wpnix/DEBIAN/control
+          echo "Maintainer: Your Name <youremail@example.com>" >> wpnix/DEBIAN/control
+          echo "Description: Installs WordPress and sets up an Nginx server block." >> wpnix/DEBIAN/control
+          mkdir -p wpnix/usr/local/bin
+          cp wpnix wpnix/usr/local/bin/wpnix
+          dpkg-deb --build wpnix
       - run: apt-get update && apt-get install -y ruby-full && gem install package_cloud
       - run: package_cloud push carlHandy/wpnix/any/any ./build/wpnix_${VERSION}_amd64.deb
 
