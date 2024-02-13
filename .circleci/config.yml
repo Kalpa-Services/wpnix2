@@ -10,10 +10,10 @@ jobs:
       - run: chmod +x wpnix
       - run: mkdir build
       - run: |
+          mkdir -p build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN
           echo "CircleCI Build Number: ${CIRCLE_BUILD_NUM}" > build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/postinst
           echo "This package was built by CircleCI in build #${CIRCLE_BUILD_NUM}." >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/postinst
           chmod +x build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/postinst
-          mkdir -p build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN
           echo "Package: wpnix" > build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
           echo "Version: ${CIRCLE_BUILD_NUM}" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
           echo "Section: web" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
