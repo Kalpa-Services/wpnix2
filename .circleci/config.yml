@@ -11,19 +11,19 @@ jobs:
       - run: mkdir build
       - run: |
           VERSION=$(git describe --tags --always)
-          mkdir -p build/wpnix/DEBIAN
+          mkdir -p build/wpnix_${VERSION}/DEBIAN
           echo "Package: wpnix" > build/wpnix/DEBIAN/control
           VERSION_NUMBER=$(echo $VERSION | awk -F. '{print $1"."$2"."$3+1}')
-          echo "Version: $VERSION_NUMBER" >> build/wpnix/DEBIAN/control
-          echo "Section: web" >> build/wpnix/DEBIAN/control
-          echo "Priority: optional" >> build/wpnix/DEBIAN/control
-          echo "Architecture: amd64" >> build/wpnix/DEBIAN/control
-          echo "Depends: nginx, php8.2, php8.2-fpm, php8.2-mysql, php8.2-xml, php8.2-mbstring, php8.2-curl, php8.2-zip, perl, certbot" >> build/wpnix/DEBIAN/control
-          echo "Maintainer: Carl Handy carl@handy.gy" >> build/wpnix/DEBIAN/control
-          echo "Description: Installs WordPress and sets up an Nginx server block." >> build/wpnix/DEBIAN/control
-          mkdir -p build/wpnix/usr/local/bin
-          cp wpnix build/wpnix/usr/local/bin/wpnix
-          dpkg-deb --build build/wpnix
+          echo "Version: $VERSION_NUMBER" >> build/wpnix_${VERSION}/DEBIAN/control
+          echo "Section: web" >> build/wpnix_${VERSION}/DEBIAN/control
+          echo "Priority: optional" >> build/wpnix_${VERSION}/DEBIAN/control
+          echo "Architecture: amd64" >> build/wpnix_${VERSION}/DEBIAN/control
+          echo "Depends: nginx, php8.2, php8.2-fpm, php8.2-mysql, php8.2-xml, php8.2-mbstring, php8.2-curl, php8.2-zip, perl, certbot" >> build/wpnix_${VERSION}/DEBIAN/control
+          echo "Maintainer: Carl Handy carl@handy.gy" >> build/wpnix_${VERSION}/DEBIAN/control
+          echo "Description: Installs WordPress and sets up an Nginx server block." >> build/wpnix_${VERSION}/DEBIAN/control
+          mkdir -p build/wpnix_${VERSION}/usr/local/bin
+          cp wpnix build/wpnix_${VERSION}/usr/local/bin/wpnix
+          dpkg-deb --build build/wpnix_${VERSION}
       - run: apt-get update && apt-get install -y ruby-full && gem install package_cloud
       - run: |
           VERSION=$(git describe --tags --always)
