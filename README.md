@@ -2,7 +2,7 @@
 
 This program automates the process of installing WordPress and setting up an Nginx server block on an Ubuntu server. It checks for the presence of Nginx and installs it if necessary. The script then configures a new Nginx server block for your domain and installs WordPress.
 
-It is a rewrite of the original bash script [wpnix](https://github.com/Kalpa-Services/wpnix). You can use either the original bash script or this Go version to install WordPress on your server but only this Go version is maintained and updated.
+It is a rewrite of the original bash script [WPNIX](https://github.com/Kalpa-Services/wpnix). You can use either the original bash script or this Go version to install WordPress on your server but only this Go version is maintained and updated.
 
 Prerequisites
 -------------

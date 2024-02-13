@@ -10,23 +10,24 @@ jobs:
       - run: chmod +x wpnix
       - run: mkdir build
       - run: |
-          VERSION_NUMBER=$(awk -F. '{print $1"."$2"."$3+1}')
-          mkdir -p build/wpnix_${VERSION_NUMBER}/DEBIAN
-          echo "Package: wpnix" > build/wpnix_${VERSION_NUMBER}/DEBIAN/control
-          echo "Version: ${VERSION_NUMBER}>> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
-          echo "Section: web" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
-          echo "Priority: optional" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
-          echo "Architecture: amd64" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
-          echo "Depends: nginx, php8.2, php8.2-fpm, php8.2-mysql, php8.2-xml, php8.2-mbstring, php8.2-curl, php8.2-zip, perl, certbot" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
-          echo "Maintainer: Carl Handy carl@handy.gy" >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
-          echo "Description: Installs WordPress and sets up an Nginx server block." >> build/wpnix_${VERSION_NUMBER}/DEBIAN/control
-          mkdir -p build/wpnix_${VERSION_NUMBER}/usr/local/bin
-          cp wpnix build/wpnix_${VERSION_NUMBER}/usr/local/bin/wpnix
-          dpkg-deb --build build/wpnix_${VERSION_NUMBER}
+          mkdir -p build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN
+          echo "CircleCI Build Number: ${CIRCLE_BUILD_NUM}" > build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/postinst
+          echo "This package was built by CircleCI in build #${CIRCLE_BUILD_NUM}." >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/postinst
+          chmod +x build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/postinst
+          echo "Package: wpnix" > build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
+          echo "Version: ${CIRCLE_BUILD_NUM}" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
+          echo "Section: web" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
+          echo "Priority: optional" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
+          echo "Architecture: amd64" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
+          echo "Depends: nginx, php8.2, php8.2-fpm, php8.2-mysql, php8.2-xml, php8.2-mbstring, php8.2-curl, php8.2-zip, perl, certbot" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
+          echo "Maintainer: Carl Handy carl@handy.gy" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
+          echo "Description: Installs WordPress and sets up an Nginx server block." >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
+          mkdir -p build/wpnix_${CIRCLE_BUILD_NUM}/usr/local/bin
+          cp wpnix build/wpnix_${CIRCLE_BUILD_NUM}/usr/local/bin/wpnix
+          dpkg-deb --build build/wpnix_${CIRCLE_BUILD_NUM}
       - run: apt-get update && apt-get install -y ruby-full && gem install package_cloud
       - run: |
-          VERSION_NUMBER=$(awk -F. '{print $1"."$2"."$3+1}')
-          package_cloud push carlHandy/wpnix/any/any build/wpnix_${VERSION_NUMBER}.deb
+          package_cloud push carlHandy/wpnix/any/any build/wpnix_${CIRCLE_BUILD_NUM}.deb
 
 workflows:
   version: 2
@@ -35,4 +36,4 @@ workflows:
       - build:
           filters:
             branches:
-              only: main
+              only: test-ci
