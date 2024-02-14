@@ -11,10 +11,17 @@ import (
 func checkAndInstallNginx() {
 	if _, err := exec.LookPath("nginx"); err != nil {
 		fmt.Println("Nginx is not installed. Installing Nginx...")
-		exec.Command("apt", "update").Run()
-		exec.Command("apt", "install", "nginx", "-y").Run()
+		if err := exec.Command("apt", "update").Run(); err != nil {
+			fmt.Fprintln(os.Stderr, "\x1b[31mError updating package lists:", err, "\x1b[0m")
+			return
+		}
+		if err := exec.Command("apt", "install", "nginx", "-y").Run(); err != nil {
+			fmt.Fprintln(os.Stderr, "\x1b[31mError installing Nginx:", err, "\x1b[0m")
+			return
+		}
+		fmt.Println("\x1b[32mNginx installed successfully.\x1b[0m")
 	} else {
-		fmt.Println("Nginx is already installed.")
+		fmt.Println("\x1b[33mNginx is already installed.\x1b[0m")
 	}
 }
 
