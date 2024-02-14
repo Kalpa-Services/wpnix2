@@ -28,16 +28,6 @@ This program installs WordPress and sets up an Nginx server block.
     -H DBHOST   database host`)
 }
 
-// Function to check and install Perl
-func checkAndInstallPerl() {
-	if _, err := exec.LookPath("perl"); err != nil {
-		fmt.Println("Perl is not installed. Installing Perl...")
-		exec.Command("apt", "install", "perl", "-y").Run()
-	} else {
-		fmt.Println("Perl is already installed.")
-	}
-}
-
 func finalizeSetupAndRestartNginx(domain string) {
 	webPath := filepath.Join(webDir, domain)
 	if err := exec.Command("chown", "-R", webUser, webPath).Run(); err != nil {
