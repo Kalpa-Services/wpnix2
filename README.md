@@ -10,6 +10,10 @@ Prerequisites
 -   An Ubuntu server (18.04 or later recommended).
 -   Root privileges on the server.
 -   Basic knowledge of terminal and command-line operations.
+-   A domain name pointing to your server's IP address.
+-   A MySQL database and user with all privileges.
+-   A MySQL password for the user.
+-   A MySQL host (usually `localhost`).
 
 Installation
 ------------
