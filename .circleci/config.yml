@@ -6,7 +6,7 @@ jobs:
       - image: golang:1.21
     steps:
       - checkout
-      - run: GOOS=linux GOARCH=amd64 go build -o wpnix main.go  
+      - run: GOOS=linux GOARCH=amd64 go build -o wpnix 
       - run: chmod +x wpnix
       - run: mkdir build
       - run: |
