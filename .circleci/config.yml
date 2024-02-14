@@ -36,4 +36,4 @@ workflows:
       - build:
           filters:
             branches:
-              only: test-ci
+              only: main
