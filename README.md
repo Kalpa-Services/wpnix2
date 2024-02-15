@@ -7,7 +7,7 @@ It is a rewrite of the original bash script [WPNIX](https://github.com/Kalpa-Ser
 Prerequisites
 -------------
 
--   An Ubuntu server (18.04 or later recommended).
+-   An Ubuntu server (18.04 or later recommended) with a minumum of 2GB RAM.
 -   Root privileges on the server.
 -   Basic knowledge of terminal and command-line operations.
 -   A domain name pointing to your server's IP address.
