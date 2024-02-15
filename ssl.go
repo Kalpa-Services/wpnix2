@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func checkAndInstallCertbot() {
@@ -41,7 +42,14 @@ func checkAndInstallCertbot() {
 
 func configureLetsEncryptSSL(domain string) {
 	fmt.Println("Configuring Let's Encrypt SSL for", domain, "...")
-	cmd := exec.Command("certbot", "--nginx", "-d", domain, "-d", "www."+domain)
+
+	var cmd *exec.Cmd
+	if strings.Count(domain, ".") > 1 {
+		cmd = exec.Command("certbot", "--nginx", "-d", domain)
+	} else {
+		cmd = exec.Command("certbot", "--nginx", "-d", domain, "-d", "www."+domain)
+	}
+
 	if err := cmd.Run(); err != nil {
 		fmt.Fprintln(os.Stderr, "\x1b[31mError configuring Let's Encrypt SSL for "+domain+":", err, "\x1b[0m")
 	} else {
