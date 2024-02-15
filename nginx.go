@@ -78,20 +78,8 @@ func finalizeSetupAndRestartNginx(domain string) {
 		return
 	}
 
-	symlinkPath := filepath.Join(nginxEnabled, domain)
-	if _, err := os.Lstat(symlinkPath); err == nil {
-		fmt.Println("\x1b[33mSymlink already exists, restarting Nginx...\x1b[0m")
-		if err := exec.Command("systemctl", "restart", "nginx").Run(); err != nil {
-			fmt.Fprintln(os.Stderr, "\x1b[31mError restarting Nginx:", err, "\x1b[0m")
-			return
-		}
-	} else if os.IsNotExist(err) {
-		if err := exec.Command("ln", "-s", filepath.Join(nginxAvailable, domain), symlinkPath).Run(); err != nil {
-			fmt.Fprintln(os.Stderr, "\x1b[31mError creating symlink:", err, "\x1b[0m")
-			return
-		}
-	} else {
-		fmt.Fprintln(os.Stderr, "\x1b[31mError checking symlink:", err, "\x1b[0m")
+	if err := exec.Command("ln", "-s", filepath.Join(nginxAvailable, domain), filepath.Join(nginxEnabled, domain)).Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "\x1b[31mError creating symlink:", err, "\x1b[0m")
 		return
 	}
 
