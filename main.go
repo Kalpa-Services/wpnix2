@@ -19,12 +19,12 @@ func showHelp() {
 This program installs WordPress and sets up an Nginx server block.
 
     -h          display this help and exit
+	-e EMAIL    email address for Let's Encrypt SSL
     -d DOMAIN   specify the domain name
     -u DBUSER   database user
     -p DBPASS   database password
     -n DBNAME   database name
-    -H DBHOST   database host
-	-e EMAIL    email address for Let's Encrypt SSL`)
+    -H DBHOST   database host`)
 }
 
 func main() {
