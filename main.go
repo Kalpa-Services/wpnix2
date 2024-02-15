@@ -59,8 +59,8 @@ func main() {
 		return
 	}
 
-	createNginxConfig(domain)
 	installWordPress(domain, dbUser, dbPass, dbName, dbHost)
+	createNginxConfig(domain)
 	configureLetsEncryptSSL(domain, email)
 	finalizeSetupAndRestartNginx(domain)
 }

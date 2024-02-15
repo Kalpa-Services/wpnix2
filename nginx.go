@@ -10,8 +10,6 @@ import (
 
 func createNginxConfig(domain string) {
 	config := fmt.Sprintf(`server {
-    listen 80;
-    listen [::]:80;
     server_tokens off;
     server_name %s www.%s;
     root %s/%s/wordpress;
@@ -78,11 +76,19 @@ func finalizeSetupAndRestartNginx(domain string) {
 		return
 	}
 
-	if err := exec.Command("ln", "-s", filepath.Join(nginxAvailable, domain), filepath.Join(nginxEnabled, domain)).Run(); err != nil {
-		fmt.Fprintln(os.Stderr, "\x1b[31mError creating symlink:", err, "\x1b[0m")
+	createSymlinkIfNotExists(filepath.Join(nginxAvailable, domain), filepath.Join(nginxEnabled, domain))
+	stopAndDisableApache2()
+	validateAndReloadNginx()
+
+	fmt.Println("\x1b[32mSuccessfully finalized setup and restarted Nginx for", domain, "\x1b[0m")
+}
+
+func stopAndDisableApache2() {
+	_, err := exec.LookPath("apache2")
+	if err != nil {
+		fmt.Println("Apache2 is not installed, skipping stop and disable steps.")
 		return
 	}
-
 	if err := exec.Command("systemctl", "stop", "apache2").Run(); err != nil {
 		fmt.Fprintln(os.Stderr, "\x1b[31mError stopping Apache2:", err, "\x1b[0m")
 		return
@@ -92,11 +98,29 @@ func finalizeSetupAndRestartNginx(domain string) {
 		fmt.Fprintln(os.Stderr, "\x1b[31mError disabling Apache2:", err, "\x1b[0m")
 		return
 	}
+}
 
-	if err := exec.Command("systemctl", "restart", "nginx").Run(); err != nil {
-		fmt.Fprintln(os.Stderr, "\x1b[31mError restarting Nginx:", err, "\x1b[0m")
-		return
+func validateAndReloadNginx() error {
+	if err := exec.Command("nginx", "-t").Run(); err != nil {
+		return fmt.Errorf("nginx configuration test failed: %w", err)
 	}
+	if err := exec.Command("systemctl", "reload", "nginx").Run(); err != nil {
+		return fmt.Errorf("failed to reload Nginx: %w", err)
+	}
+	fmt.Println("Nginx configuration reloaded successfully.")
+	return nil
+}
 
-	fmt.Println("\x1b[32mSuccessfully finalized setup and restarted Nginx for", domain, "\x1b[0m")
+func createSymlinkIfNotExists(source, target string) error {
+	if _, err := os.Lstat(target); err == nil {
+		fmt.Println("Symlink already exists:", target)
+		return nil
+	} else if !os.IsNotExist(err) {
+		return fmt.Errorf("failed to check symlink: %w", err)
+	}
+	if err := os.Symlink(source, target); err != nil {
+		return fmt.Errorf("failed to create symlink: %w", err)
+	}
+	fmt.Println("Symlink created:", target)
+	return nil
 }

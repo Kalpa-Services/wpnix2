@@ -2,12 +2,11 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"os/exec"
 	"strings"
 )
 
-func configureLetsEncryptSSL(domain string, email string) {
+func configureLetsEncryptSSL(domain string, email string) error {
 	fmt.Println("Configuring Let's Encrypt SSL for", domain, "...")
 	var cmd *exec.Cmd
 	if strings.Count(domain, ".") > 1 {
@@ -17,8 +16,9 @@ func configureLetsEncryptSSL(domain string, email string) {
 	}
 
 	if err := cmd.Run(); err != nil {
-		fmt.Fprintln(os.Stderr, "\x1b[31mError configuring Let's Encrypt SSL for "+domain+":", err, "\x1b[0m")
+		return fmt.Errorf("error configuring Let's Encrypt SSL for %s: %w", domain, err)
 	} else {
 		fmt.Println("\x1b[32mSuccessfully configured Let's Encrypt SSL for", domain, "\x1b[0m")
 	}
+	return nil
 }
