@@ -14,7 +14,7 @@ var (
 )
 
 func showHelp() {
-	fmt.Println(`Usage: wpnix [-h] [-d DOMAIN] [-u DBUSER] [-p DBPASS] [-n DBNAME] [-H DBHOST]
+	fmt.Println(`Usage: wpnix [-h] [-d DOMAIN] [-u DBUSER] [-p DBPASS] [-n DBNAME] [-H DBHOST] [-e EMAIL]
 
 This program installs WordPress and sets up an Nginx server block.
 
@@ -23,7 +23,9 @@ This program installs WordPress and sets up an Nginx server block.
     -u DBUSER   database user
     -p DBPASS   database password
     -n DBNAME   database name
-    -H DBHOST   database host`)
+    -H DBHOST   database host
+	-e EMAIL    email address for Let's Encrypt SSL
+	`)
 }
 
 func main() {
