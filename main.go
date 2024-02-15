@@ -4,8 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"os/exec"
-	"path/filepath"
 )
 
 var (
@@ -26,29 +24,6 @@ This program installs WordPress and sets up an Nginx server block.
     -p DBPASS   database password
     -n DBNAME   database name
     -H DBHOST   database host`)
-}
-
-func finalizeSetupAndRestartNginx(domain string) {
-	webPath := filepath.Join(webDir, domain)
-	if err := exec.Command("chown", "-R", webUser, webPath).Run(); err != nil {
-		fmt.Fprintln(os.Stderr, "\x1b[31mError setting permissions:", err, "\x1b[0m")
-		return
-	}
-	if err := exec.Command("chmod", "-R", "775", webPath).Run(); err != nil {
-		fmt.Fprintln(os.Stderr, "\x1b[31mError setting permissions:", err, "\x1b[0m")
-		return
-	}
-	if err := exec.Command("ln", "-s", filepath.Join(nginxAvailable, domain), filepath.Join(nginxEnabled, domain)).Run(); err != nil {
-		fmt.Fprintln(os.Stderr, "\x1b[31mError creating symlink:", err, "\x1b[0m")
-		return
-	}
-
-	if err := exec.Command("systemctl", "restart", "nginx").Run(); err != nil {
-		fmt.Fprintln(os.Stderr, "\x1b[31mError restarting Nginx:", err, "\x1b[0m")
-		return
-	}
-
-	fmt.Println("\x1b[32mSuccessfully finalized setup and restarted Nginx for", domain, "\x1b[0m")
 }
 
 func main() {

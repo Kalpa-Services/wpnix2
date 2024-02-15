@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 )
 
@@ -63,4 +64,27 @@ func createNginxConfig(domain string) {
 	writer := bufio.NewWriter(file)
 	writer.WriteString(config)
 	writer.Flush()
+}
+
+func finalizeSetupAndRestartNginx(domain string) {
+	webPath := filepath.Join(webDir, domain)
+	if err := exec.Command("chown", "-R", webUser, webPath).Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "\x1b[31mError setting permissions:", err, "\x1b[0m")
+		return
+	}
+	if err := exec.Command("chmod", "-R", "775", webPath).Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "\x1b[31mError setting permissions:", err, "\x1b[0m")
+		return
+	}
+	if err := exec.Command("ln", "-s", filepath.Join(nginxAvailable, domain), filepath.Join(nginxEnabled, domain)).Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "\x1b[31mError creating symlink:", err, "\x1b[0m")
+		return
+	}
+
+	if err := exec.Command("systemctl", "restart", "nginx").Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "\x1b[31mError restarting Nginx:", err, "\x1b[0m")
+		return
+	}
+
+	fmt.Println("\x1b[32mSuccessfully finalized setup and restarted Nginx for", domain, "\x1b[0m")
 }
