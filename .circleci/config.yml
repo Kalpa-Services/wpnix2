@@ -19,7 +19,7 @@ jobs:
           echo "Section: web" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
           echo "Priority: optional" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
           echo "Architecture: amd64" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
-          echo "Depends: nginx, php8.2, php8.2-fpm, php8.2-mysql, php8.2-xml, php8.2-mbstring, php8.2-curl, php8.2-zip, perl, certbot" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
+          # echo "Depends: nginx, php8.2, php8.2-fpm, php8.2-mysql, php8.2-xml, php8.2-mbstring, php8.2-curl, php8.2-zip, perl, certbot" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
           echo "Maintainer: Carl Handy carl@handy.gy" >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
           echo "Description: Installs WordPress and sets up an Nginx server block." >> build/wpnix_${CIRCLE_BUILD_NUM}/DEBIAN/control
           mkdir -p build/wpnix_${CIRCLE_BUILD_NUM}/usr/local/bin
