@@ -24,8 +24,7 @@ This program installs WordPress and sets up an Nginx server block.
     -p DBPASS   database password
     -n DBNAME   database name
     -H DBHOST   database host
-	-e EMAIL    email address for Let's Encrypt SSL
-	`)
+	-e EMAIL    email address for Let's Encrypt SSL`)
 }
 
 func main() {

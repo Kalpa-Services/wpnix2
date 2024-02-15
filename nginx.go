@@ -81,6 +81,21 @@ func finalizeSetupAndRestartNginx(domain string) {
 		return
 	}
 
+	if err := exec.Command("systemctl", "stop", "apache2").Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "\x1b[31mError stopping Apache2:", err, "\x1b[0m")
+		return
+	}
+
+	if err := exec.Command("systemctl", "disable", "apache2").Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "\x1b[31mError disabling Apache2:", err, "\x1b[0m")
+		return
+	}
+
+	if err := exec.Command("systemctl", "enable", "nginx").Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "\x1b[31mError enabling Nginx:", err, "\x1b[0m")
+		return
+	}
+
 	if err := exec.Command("systemctl", "restart", "nginx").Run(); err != nil {
 		fmt.Fprintln(os.Stderr, "\x1b[31mError restarting Nginx:", err, "\x1b[0m")
 		return
