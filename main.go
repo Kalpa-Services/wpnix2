@@ -83,7 +83,5 @@ func main() {
 	}
 
 	installWordPress(domain, dbUser, dbPass, dbName, dbHost)
-	checkAndInstallCertbot()
-	configureLetsEncryptSSL(domain)
 	finalizeSetupAndRestartNginx(domain)
 }
