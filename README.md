@@ -7,7 +7,7 @@ It is a rewrite of the original bash script [WPNIX](https://github.com/Kalpa-Ser
 Prerequisites
 -------------
 
--   An Ubuntu server (18.04 or later recommended) with a minumum of 2GB RAM.
+-   An Ubuntu server (20.04 or later recommended) with a minumum of 2GB RAM.
 -   Root privileges on the server.
 -   Basic knowledge of terminal and command-line operations.
 -   A domain name pointing to your server's IP address.
@@ -30,10 +30,11 @@ The script accepts the following arguments:
 -   `-p DBPASS`: The database password.
 -   `-n DBNAME`: The database name.
 -   `-H DBHOST`: The database host (usually `localhost`).
+-   `-e EMAIL`: The email address for LetsEncrypt SSL.
 
 Example usage:
 
-`sudo wpnix -d example.com -u wordpressuser -p password -n wordpressdb -H localhost`
+`sudo wpnix -d example.com -u wordpressuser -p password -n wordpressdb -H localhost -e test@example.com`
 
 If you're using a managed database service for example Digital Ocean that does not use the default `3306` port for MySQL, append your port to the DB Host. For example:
 
