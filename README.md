@@ -38,7 +38,7 @@ Example usage:
 
 If you're using a managed database service for example Digital Ocean that does not use the default `3306` port for MySQL, append your port to the DB Host. For example:
 
-`sudo wpnix -d example.com -u wordpressuser -p password -n wordpressdb -H managedb:25062`
+`sudo wpnix -d example.com -u wordpressuser -p password -n wordpressdb -H managedb:25062 -e test@example.com`
 
 Features
 --------
