@@ -28,7 +28,7 @@ func checkAndInstallNginx() {
 func createNginxConfig(domain string) {
 	config := fmt.Sprintf(`server {
     server_tokens off;
-    server_name %s www.%s;
+    server_name %s;
     root %s/%s/wordpress;
     index index.php;
 
@@ -67,7 +67,7 @@ func createNginxConfig(domain string) {
     location ~ /\.ht {
         deny all;
     }
-}`, domain, domain, webDir, domain)
+}`, domain, webDir, domain)
 
 	file, err := os.Create(filepath.Join(nginxAvailable, domain))
 	if err != nil {

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
 )
 
 func checkAndInstallCertbot() {
@@ -44,10 +43,6 @@ func configureLetsEncryptSSL(domain string, email string) error {
 	fmt.Println("Configuring Let's Encrypt SSL for", domain, "...")
 	var cmd *exec.Cmd
 	domainArgs := []string{"--nginx", "--non-interactive", "--agree-tos", "--email", email, "-d", domain}
-	// Check if domain is a subdomain and include both www and non-www versions
-	if strings.Count(domain, ".") == 1 {
-		domainArgs = append(domainArgs, "-d", "www."+domain)
-	}
 
 	cmd = exec.Command("certbot", domainArgs...)
 
