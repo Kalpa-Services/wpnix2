@@ -51,7 +51,8 @@ func configureLetsEncryptSSL(domain string) {
 	}
 
 	if err := cmd.Run(); err != nil {
-		fmt.Fprintln(os.Stderr, "\x1b[31mError configuring Let's Encrypt SSL for "+domain+":", err, "\x1b[0m")
+		fmt.Fprintf(os.Stderr, "\x1b[31mError configuring Let's Encrypt SSL for %s: %v\x1b[0m\n", domain, err)
+		fmt.Println("\x1b[31mPlease check Certbot documentation for troubleshooting.\x1b[0m")
 	} else {
 		fmt.Println("\x1b[32mSuccessfully configured Let's Encrypt SSL for", domain, "\x1b[0m")
 	}
