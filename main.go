@@ -28,8 +28,8 @@ This program installs WordPress and sets up an Nginx server block.
 
 func main() {
 	var (
-		domain, dbUser, dbPass, dbName, dbHost string
-		help                                   bool
+		domain, dbUser, dbPass, dbName, dbHost, email string
+		help                                          bool
 	)
 
 	flag.StringVar(&domain, "d", "", "Domain name")
@@ -37,6 +37,7 @@ func main() {
 	flag.StringVar(&dbPass, "p", "", "Database password")
 	flag.StringVar(&dbName, "n", "", "Database name")
 	flag.StringVar(&dbHost, "H", "", "Database host")
+	flag.StringVar(&email, "e", "", "Email address for Let's Encrypt SSL")
 	flag.BoolVar(&help, "h", false, "Show help")
 
 	flag.Parse()
@@ -46,7 +47,7 @@ func main() {
 		return
 	}
 
-	if domain == "" || dbUser == "" || dbPass == "" || dbName == "" || dbHost == "" {
+	if domain == "" || dbUser == "" || dbPass == "" || dbName == "" || dbHost == "" || email == "" {
 		fmt.Println("Error: All parameters are required.")
 		showHelp()
 		return
@@ -59,6 +60,6 @@ func main() {
 
 	createNginxConfig(domain)
 	installWordPress(domain, dbUser, dbPass, dbName, dbHost)
-	configureLetsEncryptSSL(domain)
+	configureLetsEncryptSSL(domain, email)
 	finalizeSetupAndRestartNginx(domain)
 }

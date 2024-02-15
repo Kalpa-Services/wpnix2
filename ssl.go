@@ -7,14 +7,13 @@ import (
 	"strings"
 )
 
-func configureLetsEncryptSSL(domain string) {
+func configureLetsEncryptSSL(domain string, email string) {
 	fmt.Println("Configuring Let's Encrypt SSL for", domain, "...")
-
 	var cmd *exec.Cmd
 	if strings.Count(domain, ".") > 1 {
-		cmd = exec.Command("certbot", "--nginx", "-d", domain)
+		cmd = exec.Command("certbot", "--nginx", "-d", domain, "--non-interactive", "--agree-tos", "--email", email)
 	} else {
-		cmd = exec.Command("certbot", "--nginx", "-d", domain, "-d", "www."+domain)
+		cmd = exec.Command("certbot", "--nginx", "-d", domain, "-d", "www."+domain, "--non-interactive", "--agree-tos", "--email", email)
 	}
 
 	if err := cmd.Run(); err != nil {
