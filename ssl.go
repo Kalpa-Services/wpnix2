@@ -43,11 +43,16 @@ func checkAndInstallCertbot() {
 func configureLetsEncryptSSL(domain string, email string) error {
 	fmt.Println("Configuring Let's Encrypt SSL for", domain, "...")
 	var cmd *exec.Cmd
-	if strings.Count(domain, ".") > 1 {
-		cmd = exec.Command("certbot", "--nginx", "-d", domain, "--non-interactive", "--agree-tos", "--email", email)
-	} else {
-		cmd = exec.Command("certbot", "--nginx", "-d", domain, "-d", "www."+domain, "--non-interactive", "--agree-tos", "--email", email)
+	domainArgs := []string{"--nginx", "--non-interactive", "--agree-tos", "--email", email, "-d", domain}
+	// Check if domain is a subdomain and include both www and non-www versions
+	if strings.Count(domain, ".") == 1 {
+		domainArgs = append(domainArgs, "-d", "www."+domain)
 	}
+	// Specify the nginx server block configuration file to ensure the correct one is used
+	serverBlockPath := fmt.Sprintf("/etc/nginx/sites-available/%s", domain)
+	domainArgs = append(domainArgs, "--nginx-server-root", serverBlockPath)
+
+	cmd = exec.Command("certbot", domainArgs...)
 
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("error configuring Let's Encrypt SSL for %s: %w", domain, err)
