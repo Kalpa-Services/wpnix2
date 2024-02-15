@@ -93,9 +93,8 @@ func finalizeSetupAndRestartNginx(domain string) {
 		return
 	}
 
-	createSymlinkIfNotExists(filepath.Join(nginxAvailable, domain), filepath.Join(nginxEnabled, domain))
 	stopAndDisableApache2()
-	validateAndReloadNginx()
+	RestartNginx()
 
 	fmt.Println("\x1b[32mSuccessfully finalized setup and restarted Nginx for", domain, "\x1b[0m")
 }
@@ -123,6 +122,17 @@ func validateAndReloadNginx() error {
 	}
 	if err := exec.Command("systemctl", "reload", "nginx").Run(); err != nil {
 		return fmt.Errorf("failed to reload Nginx: %w", err)
+	}
+	fmt.Println("Nginx configuration reloaded successfully.")
+	return nil
+}
+
+func RestartNginx() error {
+	if err := exec.Command("nginx", "-t").Run(); err != nil {
+		return fmt.Errorf("nginx configuration test failed: %w", err)
+	}
+	if err := exec.Command("systemctl", "restart", "nginx").Run(); err != nil {
+		return fmt.Errorf("failed to restart Nginx: %w", err)
 	}
 	fmt.Println("Nginx configuration reloaded successfully.")
 	return nil

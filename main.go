@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 var (
@@ -59,12 +60,14 @@ func main() {
 		return
 	}
 
-	checkAndInstallNginx()
-	checkAndInstallPerl()
 	checkAndInstallPHP()
+	checkAndInstallPerl()
+	checkAndInstallNginx()
+	installWordPress(domain, dbUser, dbPass, dbName, dbHost)
 	checkAndInstallCertbot()
 	createNginxConfig(domain)
-	installWordPress(domain, dbUser, dbPass, dbName, dbHost)
+	createSymlinkIfNotExists(filepath.Join(nginxAvailable, domain), filepath.Join(nginxEnabled, domain))
+	validateAndReloadNginx()
 	configureLetsEncryptSSL(domain, email)
 	finalizeSetupAndRestartNginx(domain)
 }
