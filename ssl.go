@@ -48,9 +48,6 @@ func configureLetsEncryptSSL(domain string, email string) error {
 	if strings.Count(domain, ".") == 1 {
 		domainArgs = append(domainArgs, "-d", "www."+domain)
 	}
-	// Specify the nginx server block configuration file to ensure the correct one is used
-	serverBlockPath := fmt.Sprintf("/etc/nginx/sites-available/%s", domain)
-	domainArgs = append(domainArgs, "--nginx-server-root", serverBlockPath)
 
 	cmd = exec.Command("certbot", domainArgs...)
 
